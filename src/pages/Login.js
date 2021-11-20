@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { createUser } from '../services/userAPI';
+import OnLoad from '../components/OnLoad';
 
 export default class Login extends Component {
   constructor() {
@@ -6,16 +9,36 @@ export default class Login extends Component {
     this.state = {
       buttonDisabled: true,
       inputLogin: '',
+      loading: false,
+      requisition: false,
     };
     this.verificationButtonDisabled = this.verificationButtonDisabled.bind(this);
-    this.inputChange = this.inputChange.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onClickButtonSubmit = this.onClickButtonSubmit.bind(this);
+    this.saveUserInformation = this.saveUserInformation.bind(this);
   }
 
-  inputChange({ target }) {
+  onInputChange({ target }) {
     const { value } = target;
     this.setState({ inputLogin: value }, () => {
       this.setState({ buttonDisabled: this.verificationButtonDisabled() });
     });
+  }
+
+  onClickButtonSubmit(event) {
+    event.preventDefault();
+    this.saveUserInformation();
+  }
+
+  // Ajuda da Rafaela Camargos com requisito 2
+  async saveUserInformation() {
+    const { inputLogin } = this.state;
+    const loginInformation = { name: inputLogin };
+    this.setState({ loading: true });
+    const callToAPI = await createUser(loginInformation);
+    if (callToAPI) {
+      return this.setState({ loading: false, requisition: true });
+    }
   }
 
   verificationButtonDisabled() {
@@ -30,6 +53,8 @@ export default class Login extends Component {
       {
         buttonDisabled,
         inputLogin,
+        loading,
+        requisition,
       } = this.state;
 
     return (
@@ -42,7 +67,7 @@ export default class Login extends Component {
               name="name"
               type="text"
               value={ inputLogin }
-              onChange={ this.inputChange }
+              onChange={ this.onInputChange }
             />
           </label>
 
@@ -52,10 +77,12 @@ export default class Login extends Component {
               type="submit"
               value="Entrar"
               name="button-login"
-              // onClick={ createUser }
+              onClick={ this.onClickButtonSubmit }
               disabled={ buttonDisabled }
             />
           </label>
+          { loading && <OnLoad /> }
+          { requisition && <Redirect to="/search" /> }
         </form>
       </div>
     );
