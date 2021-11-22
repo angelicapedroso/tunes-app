@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import OnLoad from '../components/OnLoad';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
 
 export default class Search extends Component {
   constructor() {
@@ -7,9 +10,19 @@ export default class Search extends Component {
     this.state = {
       buttonDisabled: true,
       inputArtist: '',
+      loading: false,
+      nameArtist: '',
+      albums: [],
     };
     this.verificationButtonDisabled = this.verificationButtonDisabled.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onClickButtonSearch = this.onClickButtonSearch.bind(this);
+    this.requisitionSearchArtist = this.requisitionSearchArtist.bind(this);
+  }
+
+  onClickButtonSearch() {
+    this.requisitionSearchArtist();
+    this.setState({ inputArtist: '' });
   }
 
   onInputChange({ target }) {
@@ -17,6 +30,25 @@ export default class Search extends Component {
     this.setState({ inputArtist: value }, () => {
       this.setState({ buttonDisabled: this.verificationButtonDisabled() });
     });
+  }
+
+  async requisitionSearchArtist() {
+    const { inputArtist } = this.state;
+    this.setState({ loading: true });
+    const searchAlbum = await searchAlbumsAPI(inputArtist);
+    if (searchAlbum.length) {
+      this.setState({
+        loading: false,
+        nameArtist: `Resultado de álbuns de: ${inputArtist}`,
+        albums: searchAlbum,
+      });
+    } else {
+      this.setState({
+        loading: false,
+        nameArtist: 'Nenhum álbum foi encontrado',
+        albums: [],
+      });
+    }
   }
 
   verificationButtonDisabled() {
@@ -27,34 +59,63 @@ export default class Search extends Component {
   }
 
   render() {
-    const { buttonDisabled, inputArtist } = this.state;
+    const { buttonDisabled,
+      inputArtist,
+      loading,
+      nameArtist,
+      albums,
+    } = this.state;
 
     return (
-      <div data-testid="page-search">
+      <div>
         <Header />
+        { loading ? <OnLoad />
+          : (
+            <div data-testid="page-search">
+              <form>
+                <label htmlFor="name">
+                  <input
+                    data-testid="search-artist-input"
+                    name="nameArtist"
+                    placeholder="Nome do Artista ou Banda"
+                    type="text"
+                    value={ inputArtist }
+                    onChange={ this.onInputChange }
+                  />
+                </label>
 
-        <form>
-          <label htmlFor="name">
-            <input
-              data-testid="search-artist-input"
-              name="nameArtist"
-              placeholder="Nome do Artista ou Banda"
-              type="text"
-              value={ inputArtist }
-              onChange={ this.onInputChange }
-            />
-          </label>
+                <label htmlFor="button-search">
+                  <input
+                    data-testid="search-artist-button"
+                    type="submit"
+                    value="Pesquisar"
+                    name="button-search"
+                    disabled={ buttonDisabled }
+                    onClick={ this.onClickButtonSearch }
+                  />
+                </label>
+              </form>
+            </div>) }
 
-          <label htmlFor="button-search">
-            <input
-              data-testid="search-artist-button"
-              type="submit"
-              value="Pesquisar"
-              name="button-search"
-              disabled={ buttonDisabled }
-            />
-          </label>
-        </form>
+        <div>
+          <section>
+            <h2>{ nameArtist }</h2>
+            { albums.map((info) => (
+              <div key="info.artistId">
+                <p>{ info.artistName }</p>
+                <h4>{ info.collectionName }</h4>
+                <img src={ info.artworkUrl100 } alt={ info.collectionName } />
+                <Link
+                  data-testid={ `link-to-album-${info.collectionId}` }
+                  to={ `/album/${info.collectionId}` }
+                >
+                  Album
+                </Link>
+              </div>
+            )) }
+          </section>
+
+        </div>
       </div>
     );
   }

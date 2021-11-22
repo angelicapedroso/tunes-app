@@ -1,3 +1,4 @@
+// Ajuda da Rafaela Camargos com requisito 2
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { createUser } from '../services/userAPI';
@@ -30,13 +31,12 @@ export default class Login extends Component {
     this.saveUserInformation();
   }
 
-  // Ajuda da Rafaela Camargos com requisito 2
   async saveUserInformation() {
     const { inputLogin } = this.state;
     const loginInformation = { name: inputLogin };
     this.setState({ loading: true });
-    const callToAPI = await createUser(loginInformation);
-    if (callToAPI) {
+    const userData = await createUser(loginInformation);
+    if (userData) {
       return this.setState({ loading: false, requisition: true });
     }
   }
