@@ -13,6 +13,10 @@ export default class Header extends Component {
     this.retrieveUserData = this.retrieveUserData.bind(this);
   }
 
+  componentDidMount() {
+    this.retrieveUserData();
+  }
+
   async retrieveUserData() {
     this.setState({ loading: true });
     const { name } = await getUser();
