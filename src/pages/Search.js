@@ -11,7 +11,7 @@ export default class Search extends Component {
       buttonDisabled: true,
       inputArtist: '',
       loading: false,
-      nameArtist: '',
+      messageSearchArtist: '',
       albums: [],
     };
     this.verificationButtonDisabled = this.verificationButtonDisabled.bind(this);
@@ -39,13 +39,13 @@ export default class Search extends Component {
     if (searchAlbum.length) {
       this.setState({
         loading: false,
-        nameArtist: `Resultado de álbuns de: ${inputArtist}`,
+        messageSearchArtist: `Resultado de álbuns de: ${inputArtist}`,
         albums: searchAlbum,
       });
     } else {
       this.setState({
         loading: false,
-        nameArtist: 'Nenhum álbum foi encontrado',
+        messageSearchArtist: 'Nenhum álbum foi encontrado',
         albums: [],
       });
     }
@@ -62,7 +62,7 @@ export default class Search extends Component {
     const { buttonDisabled,
       inputArtist,
       loading,
-      nameArtist,
+      messageSearchArtist,
       albums,
     } = this.state;
 
@@ -76,7 +76,7 @@ export default class Search extends Component {
                 <label htmlFor="name">
                   <input
                     data-testid="search-artist-input"
-                    name="nameArtist"
+                    name="messageSearchArtist"
                     placeholder="Nome do Artista ou Banda"
                     type="text"
                     value={ inputArtist }
@@ -99,7 +99,7 @@ export default class Search extends Component {
 
         <div>
           <section>
-            <h2>{ nameArtist }</h2>
+            <h2>{ messageSearchArtist }</h2>
             { albums.map((info) => (
               <div key="info.artistId">
                 <p>{ info.artistName }</p>
