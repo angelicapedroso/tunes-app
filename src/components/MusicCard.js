@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import OnLoad from './OnLoad';
 
 export default class MusicCard extends Component {
@@ -13,6 +13,11 @@ export default class MusicCard extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.restoreSong = this.restoreSong.bind(this);
+  }
+
+  componentDidMount() {
+    this.restoreSong();
   }
 
   async handleChange() {
@@ -21,6 +26,14 @@ export default class MusicCard extends Component {
     const data = await addSong(musicInfo);
     if (data) {
       return this.setState({ loading: false, checkedDisabled: true });
+    }
+  }
+
+  async restoreSong() {
+    const { trackId } = this.props;
+    const data = await getFavoriteSongs();
+    if (data.some((music) => music.trackId === trackId)) {
+      this.setState({ checkedDisabled: true });
     }
   }
 
@@ -45,7 +58,7 @@ export default class MusicCard extends Component {
               <input
                 type="checkbox"
                 name="favorite"
-                data-testid={ `checkbox-music-${trackId}` }
+                data-testid={ `checkbox-music-${ trackId }` }
                 onChange={ this.handleChange }
                 checked={ checkedDisabled }
               />
