@@ -12,22 +12,16 @@ export default class MusicCard extends Component {
       loading: false,
     };
 
-    this.FavoriteSong = this.FavoriteSong.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange() {
-    this.setState({ checkedDisabled: true }, () => {
-      this.FavoriteSong();
-    });
-  }
-
-  FavoriteSong() {
+  async handleChange() {
     const { musicInfo } = this.props;
     this.setState({ loading: true });
-    addSong(musicInfo).then(() => {
-      this.setState({ loading: false });
-    });
+    const data = await addSong(musicInfo);
+    if (data) {
+      return this.setState({ loading: false, checkedDisabled: true });
+    }
   }
 
   render() {
