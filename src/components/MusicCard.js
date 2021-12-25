@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import OnLoad from './OnLoad';
 
 export default class MusicCard extends Component {
@@ -22,12 +22,18 @@ export default class MusicCard extends Component {
 
   async handleChange() {
     const { musicInfo } = this.props;
+    const { checkedDisabled } = this.state;
     this.setState({ loading: true });
-    const data = await addSong(musicInfo);
-    if (data) {
+    const dataAdd = await addSong(musicInfo);
+    const dataRemove = await removeSong(musicInfo);
+    if (dataAdd && checkedDisabled) {
+      return this.setState({ loading: false, checkedDisabled: false });
+    }
+    if (dataRemove) {
       return this.setState({ loading: false, checkedDisabled: true });
     }
   }
+  // consulta neste repositório para resolução do requisito 11: https://github.com/tryber/sd-016-a-project-trybetunes/pull/54/commits
 
   async restoreSong() {
     const { trackId } = this.props;
