@@ -1,8 +1,10 @@
 // Ajuda da Rafaela Camargos com requisito 2
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import { MdHeadset } from 'react-icons/md';
 import { createUser } from '../services/userAPI';
 import OnLoad from '../components/OnLoad';
+import '../style/Login.css';
 
 export default class Login extends Component {
   constructor() {
@@ -58,11 +60,18 @@ export default class Login extends Component {
       } = this.state;
 
     return (
-      <div data-testid="page-login">
-        <form>
+      <div data-testid="page-login" className="page-login">
+        <form className="container-form">
+          <h2>
+            TrybeTunes
+            { ' ' }
+            <MdHeadset />
+            { ' ' }
+          </h2>
           <label htmlFor="name">
-            Nome
+            Usuário:
             <input
+              className="input-login"
               data-testid="login-name-input"
               name="name"
               type="text"
@@ -71,8 +80,20 @@ export default class Login extends Component {
             />
           </label>
 
+          <label htmlFor="password">
+            Senha:
+            <input
+              className="input-login"
+              name="password"
+              type="password"
+              // value={ inputLogin }
+              onChange={ this.onInputChange }
+            />
+          </label>
+
           <label htmlFor="button-login">
             <input
+              className="button-login"
               data-testid="login-submit-button"
               type="submit"
               value="Entrar"
