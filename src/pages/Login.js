@@ -14,6 +14,7 @@ export default class Login extends Component {
       inputLogin: '',
       loading: false,
       requisition: false,
+      inputPassword: '',
     };
     this.verificationButtonDisabled = this.verificationButtonDisabled.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
@@ -22,8 +23,8 @@ export default class Login extends Component {
   }
 
   onInputChange({ target }) {
-    const { value } = target;
-    this.setState({ inputLogin: value }, () => {
+    const { value, name } = target;
+    this.setState({ [name]: value }, () => {
       this.setState({ buttonDisabled: this.verificationButtonDisabled() });
     });
   }
@@ -57,6 +58,7 @@ export default class Login extends Component {
         inputLogin,
         loading,
         requisition,
+        inputPassword,
       } = this.state;
 
     return (
@@ -73,7 +75,7 @@ export default class Login extends Component {
             <input
               className="input-login"
               data-testid="login-name-input"
-              name="name"
+              name="inputLogin"
               type="text"
               value={ inputLogin }
               onChange={ this.onInputChange }
@@ -84,9 +86,9 @@ export default class Login extends Component {
             Senha:
             <input
               className="input-login"
-              name="password"
+              name="inputPassword"
               type="password"
-              // value={ inputLogin }
+              value={ inputPassword }
               onChange={ this.onInputChange }
             />
           </label>
