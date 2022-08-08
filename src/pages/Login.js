@@ -65,7 +65,7 @@ export default class Login extends Component {
       <div data-testid="page-login" className="page-login">
         <form className="container-form">
           <h2>
-            TrybeTunes
+            Tunes App
             { ' ' }
             <MdHeadset />
             { ' ' }
