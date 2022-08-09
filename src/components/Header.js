@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import OnLoad from './OnLoad';
+import '../style/Header.css';
 
 export default class Header extends Component {
   constructor() {
@@ -28,13 +29,18 @@ export default class Header extends Component {
     return (
       loading ? (<OnLoad />) : (
         <header data-testid="header-component">
-          <h2 data-testid="header-user-name">{ loginData }</h2>
-
-          <nav>
-            <Link to="/search" data-testid="link-to-search">Pesquisar</Link>
-            <Link to="/favorites" data-testid="link-to-favorites">Músicas Favoritas</Link>
-            <Link to="/profile" data-testid="link-to-profile">Meu Perfil</Link>
-          </nav>
+          <Link to="/search" data-testid="link-to-search">
+            <li>Pesquisar</li>
+          </Link>
+          <Link to="/favorites" data-testid="link-to-favorites">
+            <li>Músicas Favoritas</li>
+          </Link>
+          <Link to="/profile" data-testid="link-to-profile">
+            <li>Meu Perfil</li>
+          </Link>
+          <div>
+            <h2 data-testid="header-user-name">{ loginData }</h2>
+          </div>
         </header>
       ));
   }

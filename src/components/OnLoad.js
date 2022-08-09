@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { CgSearchLoading } from 'react-icons/cg';
 
 export default class OnLoad extends Component {
   render() {
     return (
       <div>
-        <h1>Carregando...</h1>
+        <CgSearchLoading className="loading" />
       </div>
     );
   }
