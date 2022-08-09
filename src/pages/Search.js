@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { BsSearch } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import OnLoad from '../components/OnLoad';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import '../style/Search.css';
 
 export default class Search extends Component {
   constructor() {
@@ -39,7 +41,7 @@ export default class Search extends Component {
     if (searchAlbum.length) {
       this.setState({
         loading: false,
-        messageSearchArtist: `Resultado de álbuns de: ${inputArtist}`,
+        messageSearchArtist: `Resultado de álbuns de: ${ inputArtist }`,
         albums: searchAlbum,
       });
     } else {
@@ -73,7 +75,7 @@ export default class Search extends Component {
           : (
             <div data-testid="page-search">
               <form>
-                <label htmlFor="name">
+                <label htmlFor="name" className="label">
                   <input
                     data-testid="search-artist-input"
                     name="messageSearchArtist"
@@ -82,17 +84,17 @@ export default class Search extends Component {
                     value={ inputArtist }
                     onChange={ this.onInputChange }
                   />
-                </label>
 
-                <label htmlFor="button-search">
-                  <input
+                  <button
                     data-testid="search-artist-button"
                     type="submit"
                     value="Pesquisar"
                     name="button-search"
                     disabled={ buttonDisabled }
                     onClick={ this.onClickButtonSearch }
-                  />
+                  >
+                    <BsSearch />
+                  </button>
                 </label>
               </form>
             </div>) }
@@ -106,8 +108,8 @@ export default class Search extends Component {
                 <h4>{ info.collectionName }</h4>
                 <img src={ info.artworkUrl100 } alt={ info.collectionName } />
                 <Link
-                  data-testid={ `link-to-album-${info.collectionId}` }
-                  to={ `/album/${info.collectionId}` }
+                  data-testid={ `link-to-album-${ info.collectionId }` }
+                  to={ `/album/${ info.collectionId }` }
                 >
                   Album
                 </Link>
